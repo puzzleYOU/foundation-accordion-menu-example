@@ -1,47 +1,44 @@
-# Foundation for Sites Template
+# Minimal reproducible example for accordion menu accessibility issues
 
-**Please open all issues with this template on the main [Foundation for Sites](https://github.com/zurb/foundation-sites/issues) repo.**
+This repository covers a minimal reproducible example regarding
+Lighthouse accessibility issues/warnings.
 
-This is the basic starter project for [Foundation for Sites 6](http://foundation.zurb.com/sites). It includes a Sass compiler and a starter HTML file for you.
+- It is either required to have `yarn`, `gulp` and `node.js` system-
+  wide installed.
 
-## Installation
+- Or it should be possible to launch this against the Nix flake
+  shipped with this repository.
 
-To use this template, your computer needs:
+**Issues**
 
-- [NodeJS](https://nodejs.org/en/) (12 or greater)
-- [Git](https://git-scm.com/)
+- Running Lighthouse in Chrome-based browsers, e.g. chromium,
+  leads to following issues:
 
-This template can be installed with the Foundation CLI, or downloaded and set up manually.
+  - `[aria-*] attributes do not match their roles`
 
-### Using the CLI
+    - This happens due to the fact `aria-multiselectable`
+      is passed which is disallowed for `role="menubar"`
 
-Install the Foundation CLI with this command:
+  - `Elements with an ARIA [role] that require children to contain a specific [role] are missing some or all of those required children.` and `[role]s are not contained by their required parent element`
 
-```bash
-npm install foundation-cli --global
-```
+    - IMHO this addresses the same issue: <li> has role="none"
+      and the wrapped <a> role="menuitem". I assume it is the
+      role="none" which "breaks" everything and tells a
+      screenreader the menu has no child items, even if there
+      are further descendants with the proper role.
 
-Use this command to set up a blank Foundation for Sites project with this template:
 
-```bash
-foundation new --framework sites --template basic
-```
+**Expected behavior**
 
-The CLI will prompt you to give your project a name. The template will be downloaded into a folder with this name.
+I would expect this minimal reproducible example to not face ARIA issues in Lighthouse.
 
-### Manual Setup
+**Possible solution**
 
-To manually set up the template, first download it with Git:
+- Omit `aria-multiselectable` entirely. I understand the idea of setting
+  this attribute dependent on whether multiple items may be unfolded, but
+  as far as I understand the standards, this does not comply with the
+  intention of `aria-multiselectable`.
 
-```bash
-git clone https://github.com/zurb/foundation-sites-template projectname
-```
-
-Then open the folder in your command line, and install the needed dependencies:
-
-```bash
-cd projectname
-npm install
-```
-
-Finally, run `npm start` to run the Sass compiler. It will re-run every time you save a Sass file.
+- Fix `role="none"`. I honestly don't know what's a good solution here.
+  Setting `role="menuitem"` as well? Setting no role and assuming screenreaders
+  will follow `role="menu"` descendants transitively until they find `menuitem`?
