@@ -9,10 +9,12 @@ Lighthouse accessibility issues/warnings.
 - Or it should be possible to launch this against the Nix flake
   shipped with this repository.
 
+The example can then be started with `yarn start`.
+
 **Issues**
 
-- Running Lighthouse in Chrome-based browsers, e.g. chromium,
-  leads to following issues:
+- Running Lighthouse against the dev server (e.g. localhost:3001) in
+  Chrome-based browsers, e.g. chromium, leads to following issues:
 
   - `[aria-*] attributes do not match their roles`
 
