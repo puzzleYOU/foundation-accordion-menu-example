@@ -21,8 +21,8 @@ Lighthouse accessibility issues/warnings.
 
   - `Elements with an ARIA [role] that require children to contain a specific [role] are missing some or all of those required children.` and `[role]s are not contained by their required parent element`
 
-    - IMHO this addresses the same issue: <li> has role="none"
-      and the wrapped <a> role="menuitem". I assume it is the
+    - IMHO this addresses the same issue: `<li>` has role="none"
+      and the wrapped `<a>` role="menuitem". I assume it is the
       role="none" which "breaks" everything and tells a
       screenreader the menu has no child items, even if there
       are further descendants with the proper role.
